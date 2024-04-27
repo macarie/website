@@ -1,0 +1,31 @@
+{
+	"compilerOptions": {
+		"noEmit": true,
+
+		// base options
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"target": "esnext",
+		"allowJs": true,
+		"resolveJsonModule": true,
+		"moduleDetection": "force",
+		"isolatedModules": true,
+		"jsx": "preserve",
+
+		// strictness options
+		"strict": true,
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitReturns": true,
+		"noUncheckedIndexedAccess": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+
+		// module options
+		"moduleResolution": "nodenext",
+		"module": "nodenext",
+		"allowImportingTsExtensions": true,
+	},
+	"include": ["source"],
+}

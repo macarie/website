@@ -1,0 +1,20 @@
+{
+	"name": "website",
+	"private": true,
+	"type": "module",
+	"version": "0.0.1",
+	"scripts": {
+		"astro": "astro",
+		"app.build": "astro build",
+		"app.preview": "astro.preview",
+		"app": "astro dev",
+		"check": "biome check .",
+		"check.types": "astro check"
+	},
+	"dependencies": {
+		"@astrojs/check": "^0.5.10",
+		"@biomejs/biome": "^1.7.1",
+		"astro": "^4.7.0",
+		"typescript": "^5.4.5"
+	}
+}
