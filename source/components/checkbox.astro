@@ -1,0 +1,9 @@
+---
+interface Props {
+	checked: boolean;
+}
+
+const { checked } = Astro.props;
+---
+
+<input type="checkbox" checked={checked} disabled class="relative mr-[.5ch] size-4 translate-y-px appearance-none rounded border-2 border-neutral-400 bg-neutral-100 after:absolute after:-top-0.5 after:left-0 after:text-sm after:font-bold after:leading-4 after:text-neutral-600 checked:after:content-['✓']" />

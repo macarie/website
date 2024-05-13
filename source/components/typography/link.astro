@@ -1,0 +1,25 @@
+---
+import { twMerge } from "tailwind-merge";
+import { focusClasses } from "../_utils";
+import type { TypographyProps } from "./_props.ts";
+
+interface Props extends Omit<TypographyProps, "element"> {
+	href: string;
+}
+
+const { class: className, href, id } = Astro.props;
+
+const isAbsoluteURL = href.includes("//");
+---
+
+<a
+  href={href}
+  target={isAbsoluteURL ? "_blank" : undefined}
+  rel={isAbsoluteURL ? "noreferrer" : undefined}
+  class={twMerge(
+    focusClasses,
+    "bg-gradient-to-t from-[--link] to-[--link] bg-[size:100%_50%] bg-[position:center_calc(100%+4px)] bg-no-repeat p-1 font-medium text-neutral-600 transition-[color,background-size,--link] [--link:theme(colors.neutral.400)] hover:bg-[size:100%_100%] hover:text-neutral-800 hover:[--link:theme(colors.highlight)] focus-visible:rounded-md focus-visible:bg-[size:100%_100%] focus-visible:text-neutral-800 focus-visible:[--link:theme(colors.highlight)]",
+    className
+  )}
+  id={id}><slot /></a
+>

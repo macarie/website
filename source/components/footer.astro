@@ -1,0 +1,33 @@
+---
+import Grid from "./grid.astro";
+import Code from "./typography/code.astro";
+import Paragraph from "./typography/paragraph.astro";
+import Small from "./typography/small.astro";
+
+const commit = import.meta.env.CF_PAGES_COMMIT_SHA as string | undefined;
+
+const foundation = new Date(Date.UTC(2024, 0, 1));
+
+export const yearFormatter = new Intl.DateTimeFormat(["en-US", "en"], {
+	year: "numeric",
+});
+---
+
+<Grid element="footer" class="mt-auto bg-neutral-300 py-14 gap-2">
+  <Paragraph> Crafted with ❤️‍🔥 and lots of energy drinks.</Paragraph>
+  <Paragraph>
+    <Small>
+      &copy; {yearFormatter.formatRange(foundation, new Date())} Raul Macarie. All
+      rights reserved.
+    </Small>
+  </Paragraph>
+  {
+    commit && (
+      <div aria-hidden="true" class="select-none">
+        <Code class="text-neutral-600 text-xs">
+          #{commit.slice(-7)}
+        </Code>
+      </div>
+    )
+  }
+</Grid>

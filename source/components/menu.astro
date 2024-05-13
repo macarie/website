@@ -1,0 +1,120 @@
+---
+// transitions timeline: https://excalidraw.com/#json=NfxVea4hvz3tGsQJI9Oal,f67JdetGYNllInt1iVZdDQ
+import { twMerge } from "tailwind-merge";
+import { createRandomId } from "../utils/sqids";
+import { focusClasses } from "./_utils.ts";
+import Cube from "./icons/cube.astro";
+import PencilSquare from "./icons/pencil-square.astro";
+import UserCircle from "./icons/user-circle.astro";
+import Tag from "./tag.astro";
+
+const itemClasses = twMerge(
+	focusClasses,
+	"rounded-lg p-2 text-sm transition-colors hover:bg-neutral-100 focus-visible:bg-neutral-100 aria-[expanded=true]:bg-neutral-100",
+);
+
+const menuItems = [
+	{ content: "Writing", href: "/writing/", icon: PencilSquare },
+	{ content: "About", href: "/about/", icon: UserCircle },
+	{ content: "Uses", href: "/uses/", icon: Cube },
+];
+
+const buttonId = createRandomId();
+const menuId = createRandomId();
+---
+
+<div class="sticky top-4 z-40 mb-11 flex justify-center">
+  <nav
+    id="navbar"
+    class="group absolute flex w-[16rem] max-w-full flex-col rounded-xl bg-neutral-300 p-1 transition-[width,clip-path] data-[state=open]:w-[24rem] data-[state=closed]:[clip-path:inset(0_0_calc(100%-44px)_0_round_.75rem)] data-[state=open]:[clip-path:inset(0_round_.75rem)] data-[state=open]:[transition-delay:0ms,200ms,200ms] data-[state=closed]:[transition-delay:380ms,180ms,180ms]"
+    data-state="closed"
+  >
+    <div class="flex justify-between">
+      <a href="/" class={itemClasses}>Home</a>
+      <button
+        id={buttonId}
+        role="button"
+        aria-haspopup="menu"
+        aria-expanded="false"
+        aria-controls={menuId}
+        class={itemClasses}
+      >
+        Menu
+      </button>
+    </div>
+    <ul
+      id={menuId}
+      inert="true"
+      role="menu"
+      aria-labelledby={buttonId}
+      class="mt-1 flex w-[calc(100vw-2.5rem)] max-w-full flex-col gap-1 rounded-lg bg-neutral-100 p-1 transition-[clip-path] group-data-[state=open]:[clip-path:inset(0_round_.5rem)] group-data-[state=closed]:[clip-path:inset(100%_0_0_0_round_.5rem)] group-data-[state=closed]:[transition-delay:0ms] group-data-[state=open]:[transition-delay:380ms]"
+    >
+      {
+        menuItems.map((item) => (
+          <li class="flex group">
+            <a
+              href={item.href}
+              role="menuitem"
+              class={twMerge(
+                focusClasses,
+                "[&>svg]:size-5 rounded-md px-2 py-2 text-sm flex w-full select-none items-center gap-[1ch] hover:bg-neutral-200 transition-colors focus-visible:bg-neutral-200"
+              )}
+            >
+              <item.icon />
+              {item.content}
+              <Tag class="ml-auto" stacked>~{item.href.replace(/\/$/, '')}</Tag>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</div>
+
+<script>
+  type MenuStates = (typeof allowedMenuStates)[number];
+
+  const allowedMenuStates = ["closed", "open"] as const;
+  const flipStates = (state: MenuStates) =>
+    allowedMenuStates.at(allowedMenuStates.indexOf(state) - 1)!;
+
+  let menuState: MenuStates = "closed";
+
+  const menu = document.getElementById("navbar");
+
+  if (!menu) {
+    throw new Error("`<Menu>` component not found.");
+  }
+
+  const button = menu.querySelector("button")!;
+  const list = menu.querySelector("ul")!;
+  const firstListLink = list.querySelector("a")!;
+
+  const ignoredPoinerTypes = new Set(["mouse", "pen", "touch"]);
+
+  menu.querySelector("button")!.addEventListener("click", (event) => {
+    menuState = flipStates(menuState);
+
+    menu.setAttribute("data-state", menuState);
+    button.setAttribute("aria-expanded", String(menuState === "open"));
+
+    if (menuState === "open") {
+      list.removeAttribute("inert");
+
+      if (
+        event instanceof PointerEvent &&
+        ignoredPoinerTypes.has(event.pointerType) === false
+      ) {
+        list.addEventListener(
+          "transitionend",
+          () => {
+            firstListLink.focus();
+          },
+          { once: true }
+        );
+      }
+    } else {
+      list.setAttribute("inert", "true");
+    }
+  });
+</script>

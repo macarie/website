@@ -1,0 +1,29 @@
+---
+import { getCollection } from "astro:content";
+import Base from "./base/base.astro";
+import Entry from "./base/entry.astro";
+
+const articles = await Promise.all(
+	(await getCollection("writing", (article) => article.data.draft !== true))
+		.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+		.slice(0, 5),
+);
+---
+
+<Base
+  title="Recently Published"
+  cta={{
+    content: "Browse all articles",
+    link: "/writing/",
+  }}
+>
+  {
+    articles.map((article) => (
+      <Entry
+        link={`/writing/${article.slug}/`}
+        title={article.data.title}
+        description={article.data.description.short}
+      />
+    ))
+  }
+</Base>

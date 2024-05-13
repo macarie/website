@@ -1,0 +1,85 @@
+---
+import { twMerge } from "tailwind-merge";
+import { typographyClasses } from "../components/_utils.ts";
+import Grid from "../components/grid.astro";
+import MetaTags from "../components/meta-tags.astro";
+import Base from "./base.astro";
+
+type Props = {
+	title: string;
+	description: string;
+};
+
+const { title, description } = Astro.props;
+---
+
+<MetaTags title={title} description={description} />
+<Base>
+  <style is:global>
+    #content {
+      [data-rehype-pretty-code-figure] code {
+        @apply text-base tracking-none font-thin;
+      }
+
+      span[data-rehype-pretty-code-figure] {
+        code {
+          @apply rounded-md px-1.5 py-1;
+        }
+      }
+
+      figure[data-rehype-pretty-code-figure] {
+        @apply col-popout;
+
+        pre {
+          @apply py-2 rounded-lg relative;
+
+          &::before {
+            content: attr(data-language);
+
+            @apply absolute right-0 top-0 rounded-bl rounded-tr px-1.5 py-0.5 text-xs;
+          }
+
+          &[data-language="ts"]::before {
+            @apply bg-[#3178c6] text-neutral-100 uppercase;
+          }
+
+          &[data-language="js"]::before {
+            @apply bg-[#f7df1e] text-neutral-800 uppercase;
+          }
+
+          &[data-language="astro"]::before {
+            @apply bg-[#3d50f5] text-neutral-100 capitalize;
+          }
+
+          code {
+            counter-reset: line;
+
+            [data-line] {
+              @apply px-6;
+            }
+
+            [data-line]::before {
+              counter-increment: line;
+              content: counter(line);
+
+              @apply inline-block text-right mr-6 w-[2ch] opacity-50;
+            }
+
+            [data-highlighted-line] {
+              @apply bg-[oklch(100%_0_0/.075)];
+            }
+
+            mark {
+              box-shadow: inset 0 -0.125rem oklch(100% 0 0 / 0.2);
+
+              @apply px-[.5ch] py-1 rounded-md bg-[oklch(58.7%_0.263_290.56)];
+            }
+          }
+        }
+      }
+    }
+  </style>
+  <Grid element="main" class={twMerge(typographyClasses, "col-full")} main>
+    <slot />
+  </Grid>
+</Base>

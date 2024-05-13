@@ -1,0 +1,18 @@
+---
+import { twMerge } from "tailwind-merge";
+import type { TypographyProps } from "./_props";
+
+interface Props extends TypographyProps {}
+
+const { element, class: className, id } = Astro.props;
+
+const Element = element ?? "strong";
+---
+
+<Element
+  class={twMerge(
+    "highlight rounded-md py-0.5 font-medium [--highlight:theme(colors.highlight)]",
+    className
+  )}
+  id={id}><slot /></Element
+>

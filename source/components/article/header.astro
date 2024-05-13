@@ -1,0 +1,27 @@
+---
+import type { getCollection } from "astro:content";
+import { dateFormatter } from "../../utils/formatters";
+import Tag from "../tag.astro";
+import H1 from "../typography/h1.astro";
+import Small from "../typography/small.astro";
+
+interface Props {
+	article: Awaited<ReturnType<typeof getCollection<"writing">>>[number];
+	tags: Awaited<ReturnType<typeof getCollection<"tags">>>;
+	stacked?: true;
+}
+
+const { article, tags, stacked } = Astro.props;
+---
+
+<header>
+  <Small element="p" class="flex mb-[.25lh]">
+    <time datetime={article.data.date.toISOString()}>
+      {dateFormatter.format(article.data.date)}
+    </time>
+    <span class="ml-auto flex gap-[1ch]">
+      {tags.map((tag) => <Tag stacked={stacked}>{tag.data.name}</Tag>)}
+    </span>
+  </Small>
+  <H1>{article.data.title}</H1>
+</header>

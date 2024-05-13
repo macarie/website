@@ -1,0 +1,22 @@
+---
+import Base from "./base/base.astro";
+import Entry from "./base/entry.astro";
+
+interface Props {
+	projects: ReadonlyArray<{
+		title: string;
+		description: string;
+		link: string;
+	}>;
+}
+
+const { projects } = Astro.props;
+---
+
+<Base title="Featured Projects">
+  {
+    projects.map((project) => (
+      <Entry link={project.link} title={project.title} description={project.description} />
+    ))
+  }
+</Base>

@@ -1,0 +1,19 @@
+---
+import Grid from "../components/grid.astro";
+import MetaTags from "../components/meta-tags.astro";
+import Base from "./base.astro";
+
+type Props = {
+	title: string;
+	description: string;
+};
+
+const { title, description } = Astro.props;
+---
+
+<MetaTags title={title} description={description} />
+<Base>
+  <Grid element="main" class="col-full gap-y-14" main>
+    <slot />
+  </Grid>
+</Base>

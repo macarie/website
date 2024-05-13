@@ -1,0 +1,23 @@
+---
+import { getCollection } from "astro:content";
+import { getEntries } from "astro:content";
+import { mdxComponents } from "../../components/_mod";
+import Header from "../../components/article/header.astro";
+import Post from "../../layouts/post.astro";
+
+export const getStaticPaths = async () =>
+	Promise.all(
+		(await getCollection("writing")).map(async (article) => ({
+			params: { post: article.slug },
+			props: { article, tags: await getEntries(article.data.tags) },
+		})),
+	);
+
+const { article, tags } = Astro.props;
+const { Content } = await article.render();
+---
+
+<Post title={article.data.title} description={article.data.description.long}>
+  <Header article={article} tags={tags} />
+  <Content components={mdxComponents} />
+</Post>

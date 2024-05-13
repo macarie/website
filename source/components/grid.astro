@@ -1,0 +1,18 @@
+---
+interface Props {
+	class?: string;
+	element?: keyof HTMLElementTagNameMap;
+	main?: boolean;
+}
+
+const { class: className, element, main } = Astro.props;
+
+const Element = element ?? "div";
+---
+
+<Element
+  class:list={["grid grid-cols-breakouts", className]}
+  id={main ? "content" : undefined}
+>
+  <slot />
+</Element>

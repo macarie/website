@@ -1,0 +1,38 @@
+---
+import { createRandomId } from "../../../../utils/sqids";
+import H2 from "../../../typography/h2.astro";
+import CallToAction from "./call-to-action.astro";
+
+interface Props {
+	title: string;
+	split?: true;
+	cta?: {
+		content: string;
+		link: string;
+	};
+}
+
+const { title, cta, split = false } = Astro.props;
+
+const id = createRandomId();
+---
+
+<section class="rounded-xl bg-neutral-300 p-1" aria-labelledby={id}>
+  <H2 element="h1" id={id} class="px-4 py-2.5">{title}</H2>
+  <div
+    class:list={[
+      "flex flex-col gap-1",
+      !split && "bg-neutral-100 rounded-lg p-1",
+      cta && "mb-1",
+    ]}
+  >
+    <slot />
+  </div>
+  {
+    cta && (
+      <div class="bg-neutral-100 rounded-lg p-1">
+        <CallToAction href={cta.link}>{cta.content}</CallToAction>
+      </div>
+    )
+  }
+</section>

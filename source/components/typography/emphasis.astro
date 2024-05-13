@@ -1,0 +1,18 @@
+---
+import { twMerge } from "tailwind-merge";
+import type { TypographyProps } from "./_props.ts";
+
+interface Props extends TypographyProps {}
+
+const { element, class: className, id } = Astro.props;
+
+const Element = element ?? "em";
+---
+
+<Element
+  class={twMerge(
+    "bg-gradient-to-b from-[color-mix(in_oklch,theme(colors.highlight),oklch(0%_0_none)49%)] to-[color-mix(in_oklch,theme(colors.highlight),oklch(0%_0_none)26%)] bg-clip-text pr-[.4ch] font-cursive text-transparent",
+    className
+  )}
+  id={id}><slot /></Element
+>

@@ -1,0 +1,34 @@
+---
+import { getEntry } from "astro:content";
+import type { ValidContentEntrySlug } from "astro:content";
+import { mdxComponents } from "../components/_mod";
+import H1 from "../components/typography/h1.astro";
+import Small from "../components/typography/small.astro";
+import Post from "../layouts/post.astro";
+import { dateFormatter } from "../utils/formatters";
+
+interface Props {
+	slug: ValidContentEntrySlug<"root">;
+}
+
+const article = await getEntry("root", Astro.props.slug);
+
+const { Content } = await article.render();
+---
+
+<Post title={article.data.title} description={article.data.description}>
+  <header>
+    {
+      article.data.last_update && (
+        <Small element="p" class="mb-[.25lh]">
+          Last updated on
+          <time datetime={article.data.last_update.toISOString()}>
+            {dateFormatter.format(article.data.last_update)}
+          </time>
+        </Small>
+      )
+    }
+    <H1>{article.data.title}</H1>
+  </header>
+  <Content components={mdxComponents} />
+</Post>

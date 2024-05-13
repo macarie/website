@@ -1,0 +1,14 @@
+---
+import { twMerge } from "tailwind-merge";
+import type { TypographyProps } from "./_props";
+
+interface Props extends TypographyProps {}
+
+const { element, class: className, id } = Astro.props;
+
+const Element = element ?? "ul";
+---
+
+<Element class={twMerge("list-inside list-['🞱'] space-y-2.5 marker:mr-[5ch] marker:font-iosevka [&:has(input[type=checkbox])]:list-none [&>li>ul]:my-2.5 [&>li>ul]:list-['🞷'] [&>li>ul]:pl-[3ch]", className)} id={id}>
+  <slot />
+</Element>

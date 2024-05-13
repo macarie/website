@@ -1,0 +1,292 @@
+---
+import { twMerge } from "tailwind-merge";
+import { focusClasses } from "../components/_utils";
+import Blur from "../components/blur.astro";
+import Footer from "../components/footer.astro";
+import Grid from "../components/grid.astro";
+import Header from "../components/header.astro";
+import Menu from "../components/menu.astro";
+import Noise from "../components/noise.astro";
+---
+
+<html
+  lang="en"
+  class="bg-neutral-200 text-neutral-700 antialiased selection:bg-neutral-700 selection:text-neutral-100 selection:[text-shadow:none]"
+>
+  <head>
+    <meta charset="utf-8" />
+    <link
+      rel="preload"
+      href="/fonts/inter@v4.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <style is:global>
+      @font-face {
+        font-family: "8af7bd5b545567adffb3dfceb5bedb353a522d7bf1b3a2b8af7b6064156babc0";
+        src: url("/fonts/inter@v4.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: swap;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "c6a67bc6b5efc5451b4670cdcfd0d9d155253952ab471d45a15ecb17acb9a846";
+        src: url("/fonts/berkeley-mono@v1.009.woff2") format("woff2");
+        font-weight: 100 900;
+        font-display: swap;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "6caa5f31b40222117fd7793d019fb8174bf08af1dab2f370101ef44c602049f1";
+        src: url("/fonts/lore-regular.woff2") format("woff2");
+        font-weight: 400;
+        font-display: swap;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "4729f6faf0d7fdac0624c275daeb52960a65e186ccd8b60e7e043928f6c91ca1";
+        src: url("/fonts/iosevka-subset@v30.1.2.woff2") format("woff2");
+        font-weight: 400;
+        font-display: swap;
+        font-style: normal;
+      }
+
+      :root {
+        --inter: "8af7bd5b545567adffb3dfceb5bedb353a522d7bf1b3a2b8af7b6064156babc0";
+        --berkeley-mono: "c6a67bc6b5efc5451b4670cdcfd0d9d155253952ab471d45a15ecb17acb9a846";
+        --iosevka: "4729f6faf0d7fdac0624c275daeb52960a65e186ccd8b60e7e043928f6c91ca1";
+        --lore: "6caa5f31b40222117fd7793d019fb8174bf08af1dab2f370101ef44c602049f1";
+      }
+
+      @property --social-from {
+        syntax: "<color>";
+        initial-value: transparent;
+        inherits: false;
+      }
+
+      @property --social-to {
+        syntax: "<color>";
+        initial-value: transparent;
+        inherits: false;
+      }
+
+      @property --link {
+        syntax: "<color>";
+        initial-value: transparent;
+        inherits: false;
+      }
+
+      .grid-cols-breakouts > *:not(.col-full, .col-popout) {
+        grid-column: content;
+      }
+
+      .highlight {
+        background: linear-gradient(
+            104deg,
+            color-mix(in oklch, var(--highlight), oklch(none none none / 0) 100%) 0.9%,
+            color-mix(in oklch, var(--highlight), oklch(none none none / 0) 0%) 2.4%,
+            color-mix(in oklch, var(--highlight), oklch(none none none / 0) 50%) 5.8%,
+            color-mix(in oklch, var(--highlight), oklch(none none none / 0) 90%) 93%,
+            color-mix(in oklch, var(--highlight), oklch(none none none / 0) 30%) 96%,
+            color-mix(in oklch, var(--highlight), oklch(none none none / 0) 100%) 98%
+          ),
+          linear-gradient(
+            183deg,
+            color-mix(in oklch, var(--highlight), oklch(none none none / 0) 100%) 0%,
+            color-mix(in oklch, var(--highlight), oklch(none none none / 0) 70%) 7.9%,
+            color-mix(in oklch, var(--highlight), oklch(none none none / 0) 100%) 15%
+          );
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+        text-shadow:
+          1px 8px 9.8px color-mix(in oklch, var(--highlight), oklch(none none none / 0) 30%),
+          4px -13.1px 7.3px #fff,
+          -8.1px 8.7px 10px #fff;
+        color: color-mix(in oklch, var(--highlight), oklch(0% 0 none) 60%);
+      }
+
+      .mask-gradient {
+        mask-image: linear-gradient(
+          to bottom,
+          oklch(0% 0 0) 0%,
+          oklch(0% 0 0 / 0.987) 8.1%,
+          oklch(0% 0 0 / 0.951) 15.5%,
+          oklch(0% 0 0 / 0.896) 22.5%,
+          oklch(0% 0 0 / 0.825) 29%,
+          oklch(0% 0 0 / 0.741) 35.3%,
+          oklch(0% 0 0 / 0.648) 41.2%,
+          oklch(0% 0 0 / 0.55) 47.1%,
+          oklch(0% 0 0 / 0.45) 52.9%,
+          oklch(0% 0 0 / 0.352) 58.8%,
+          oklch(0% 0 0 / 0.259) 64.7%,
+          oklch(0% 0 0 / 0.175) 71%,
+          oklch(0% 0 0 / 0.104) 77.5%,
+          oklch(0% 0 0 / 0.049) 84.5%,
+          oklch(0% 0 0 / 0.013) 91.9%,
+          oklch(0% 0 0 / 0) 100%
+        );
+      }
+    </style>
+  </head>
+  <body class="text-lg tracking-lg">
+    <Noise />
+    <Blur />
+    <a
+      href="#content"
+      class={twMerge(
+        focusClasses,
+        "bg-white-100 absolute -top-full z-50 px-3 py-2 text-center focus-visible:top-0 focus-visible:block"
+      )}
+    >
+      Skip to main content
+    </a>
+    <div class="h-dvh flex flex-col">
+      <Grid class="pb-14">
+        <Menu />
+        <Header />
+        <slot />
+      </Grid>
+      <Footer />
+    </div>
+  </body>
+</html>
+
+<script>
+  import {
+    autoUpdate,
+    computePosition,
+    flip,
+    inline,
+    offset,
+    shift,
+  } from "@floating-ui/dom";
+
+  const dpr = globalThis.devicePixelRatio ?? 1;
+
+  const round = (value: number) => Math.round(value * dpr) / dpr;
+
+  const tooltip = document.createElement("div");
+
+  tooltip.className =
+    "pointer-events-none absolute left-0 top-0 w-max translate-x-[--x] translate-y-[--y] rounded-sm bg-neutral-100 p-2 font-mono text-xs font-thin opacity-0 shadow-sm blur-xl transition-[filter,opacity]";
+  tooltip.style.setProperty("--x", "var(--computed-x, var(--mouse-x))");
+  tooltip.style.setProperty("--y", "var(--computed-y, var(--mouse-y))");
+  tooltip.ariaHidden = "true";
+
+  document.body.appendChild(tooltip);
+
+  const OFFSET = 10;
+
+  let tooltipOffsetY = 0;
+  let tooltipOffsetX = 0;
+
+  const computeOffset = () => {
+    const { height: tooltipHeight, width: tooltipWidth } =
+      tooltip.getBoundingClientRect();
+
+    tooltipOffsetY = tooltipWidth / 2;
+    tooltipOffsetX = tooltipHeight + OFFSET;
+  };
+
+  computeOffset();
+
+  let mouseX = 0;
+  let mouseY = 0;
+
+  document.addEventListener(
+    "mousemove",
+    ({ pageX, pageY }) => {
+      mouseX = pageX - tooltipOffsetY;
+      mouseY = pageY - tooltipOffsetX;
+    },
+    { capture: false, passive: true }
+  );
+
+  const setMousePosition = () => {
+    tooltip.style.setProperty("--mouse-x", `${round(mouseX)}px`);
+    tooltip.style.setProperty("--mouse-y", `${round(mouseY)}px`);
+
+    requestAnimationFrame(setMousePosition);
+  };
+
+  requestAnimationFrame(setMousePosition);
+
+  const targets = document.querySelectorAll('[data-tooltip], a[href*="//"]');
+  let timeout: ReturnType<typeof setTimeout>;
+
+  const updatePosition = (target: Element, x?: number, y?: number) => () =>
+    computePosition(target, tooltip, {
+      placement: "top",
+      middleware: [
+        inline({ x, y }),
+        offset(OFFSET),
+        flip(),
+        shift({ padding: 16 }),
+      ],
+    }).then(({ x, y }) => {
+      tooltip.style.setProperty("--computed-x", `${round(x)}px`);
+      tooltip.style.setProperty("--computed-y", `${round(y)}px`);
+    });
+
+  const noEntry = { clientX: undefined, clientY: undefined };
+
+  for (const target of targets) {
+    const content =
+      target.getAttribute("data-tooltip") ??
+      new URL(target.getAttribute("href") ?? "//", location.href).href;
+
+    let cleanup: (() => void) | null = null;
+
+    target.addEventListener(
+      "mouseenter",
+      (event) => {
+        const { clientX, clientY } =
+          event instanceof MouseEvent ? event : noEntry;
+
+        tooltip.style.setProperty("opacity", "1");
+        tooltip.style.setProperty("filter", "initial");
+        tooltip.style.setProperty("", "initial");
+        tooltip.style.setProperty(
+          "transition-property",
+          "filter, opacity, transform"
+        );
+
+        if (timeout) {
+          clearTimeout(timeout);
+        }
+
+        tooltip.innerHTML = content ?? "";
+
+        cleanup = autoUpdate(
+          target,
+          tooltip,
+          updatePosition(target, clientX, clientY)
+        );
+      },
+      { capture: false, passive: true }
+    );
+
+    target.addEventListener(
+      "mouseleave",
+      () => {
+        tooltip.style.removeProperty("--computed-x");
+        tooltip.style.removeProperty("--computed-y");
+        tooltip.style.removeProperty("opacity");
+        tooltip.style.removeProperty("filter");
+
+        timeout = setTimeout(() => {
+          tooltip.style.removeProperty("transition-property");
+        }, 250);
+
+        computeOffset();
+
+        cleanup?.();
+      },
+      { capture: false, passive: true }
+    );
+  }
+</script>

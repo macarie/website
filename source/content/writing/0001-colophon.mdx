@@ -1,0 +1,49 @@
+---
+title: Colophon
+description:
+  short: Everything behind and about this website.
+  long: This website is a testament to a perfectionist's struggle to get things done. Dive into the tech stack, typography choices, and commitment to a positive space.
+date: 2024-06-07
+tags:
+  - meta
+slug: colophon
+---
+import Small from '../../components/typography/small.astro'
+
+I designed and built this website myself. For years I wanted a positive and safe place to share my thoughts, ideas, knowledge, and the pictures I take. Thinking more about it, it was one of my goals for 2022:
+
+::tweet{id=1477396862822985733}
+
+But this article is being written in 2024, so what happened? It's not like I didn't build the website… on the contrary, so far I've designed at least four other versions and even implemented them multiple times using different technologies. The issue is that **I'm a perfectionist and a chronic procrastinator** – I'm also 99% certain I have ADHD, so that doesn't help.
+
+You see, when I create something, it _has to be perfect_. It's a paralyzing thought that I've been able to keep more and more at bay in the last year, so here we are, I guess. Maybe I'll write an article about this topic as I have a blog now… 👀
+
+Ugh, enough backstory, or I'll get emotional; let's dive in the technicalities!
+
+## The Tech
+
+As mentioned above, I've built various iterations of this website in multiple frameworks, sometimes even multiple times using the same framework. For this version I chose to use [Astro](https://astro.build/) as it's simply amazing (and they keep making it better!) and has [the best content management API](https://docs.astro.build/en/guides/content-collections/) I've ever used – chapeau. [Cloudflare](https://cloudflare.com/) serves the output of a static build, so everything is built upfront.
+
+I've tried keeping the client-side JavaScript code on a short leash. Currently, there are no frameworks, only raw JS. It powers the cute tooltips that appear above external links and <span class="decoration-dotted underline-offset-4 underline" data-tooltip="Look how awesome this thing is! 🥺">custom elements</span> using [Floating UI](https://floating-ui.com/) and the menu that follows you around at the top. This might change tho: I'm considering using either [SolidJS](https://solidjs.com/) or [Qwik](https://qwik.builder.io/) for the menu as it's a bit convoluted managing the keyboard navigation and the open/closed state using just JS.
+
+[Tailwind CSS](https://tailwindcss.com/) takes care of the styling (fun fact: it's been the only constant in every iteration) along with a tiny bit of custom CSS. All the content you see is written in [MDX](https://mdxjs.com/), an overpowered version of Markdown.
+
+## The Typography
+
+Header and body copy are set in [Inter](https://rsms.me/inter/). I'm using the variable version which allows using different weights while serving one file. Only one size is used to reduce complexity and remove distractions while reading.
+
+Code blocks and inline snippets are set in [Berkeley Mono](https://berkeleygraphics.com/typefaces/berkeley-mono/), which has quickly become my go-to monospace font in every application. Emphasized copy is set in [Lore](https://typeheist.co/font/lore/), a really cute, all-caps, handwriting font.
+
+## The Commitment
+
+As I said in the incipit, this website aims to be a positive and safe space, not only for me but also for others. I will try my best to stay positive and optimistic and use an inclusive language in all my posts.
+
+For transparency, a tooltip appears while hovering over links to external websites that contains the full link.
+
+Tracking is reduced to a minimum, using a self-hosted service that values privacy, uses no cookies, and is GDPR compliant. Collected data is anonymized, an irreversible process that results in data that cannot be linked to a specific individual.
+
+---
+
+Just like the [About](/about/) and [Uses](/uses/) pages, this will be a living article, which means it will always be up to date.
+
+<Small>PS</Small> — I would like to thank [Matt Pi](https://stackoverflow.com/a/62484130) for the realistic highlighter effect, as I'm using a slightly modified version. Whoever you are, you're a legend! 🙌🏼

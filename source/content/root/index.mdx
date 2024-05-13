@@ -1,0 +1,93 @@
+---
+title: "Raul Macarie"
+description: Developer. Photographer. Writer?
+slug: "/"
+---
+
+import Blog from "../../components/landing-page/sections/blog.astro";
+import Projects from "../../components/landing-page/sections/projects.astro";
+import Socials from "../../components/landing-page/socials.astro";
+import NewOpportunities from "../../components/landing-page/new-opportunities.astro";
+import AtSymbol from "../../components/icons/at-symbol.astro";
+import X from "../../components/icons/brands/x.astro";
+import Bluesky from "../../components/icons/brands/bluesky.astro";
+import LinkedIn from "../../components/icons/brands/linked-in.astro";
+import GitHub from "../../components/icons/brands/git-hub.astro";
+
+<section class="text-pretty flex flex-col md:flex-row md:justify-between md:items-end justify-start items-stretch gap-8">
+  <div class="max-w-[35ch]">
+    Building things with code. Design lover.\
+    Music connoisseur since day one.\
+    Gastronomic explorer.
+  </div>
+  <Socials
+    items={[
+      {
+        link: "mailto:hello@macarie.email",
+        callToAction: "Send me an email",
+        icon: AtSymbol,
+        color: "oklch(62.57% 0.206 29.08)",
+      },
+      {
+        link: "//github.com/macarie",
+        callToAction: "Follow me on GitHub",
+        icon: GitHub,
+        color: "oklch(20.58% 0.002 17.29)",
+      },
+      {
+        link: "//x.com/macarie_x",
+        callToAction: "Follow me on X",
+        icon: X,
+        color: "oklch(0% 0 0)",
+      },
+      {
+        link: "//bsky.app/profile/macarie.me",
+        callToAction: "Follow me on Bluesky",
+        icon: Bluesky,
+        color: "oklch(62.58% 0.205 254.95)",
+      },
+      {
+        link: "//www.linkedin.com/in/macarie",
+        callToAction: "Let's connect on LinkedIn",
+        icon: LinkedIn,
+        color: "oklch(51.56% 0.163 254.73)",
+      },
+    ]}
+  />
+</section>
+
+<NewOpportunities />
+
+<Blog
+  articles={[
+    {
+      date: new Date(),
+      slug: "/",
+      title: "How It Got Worse",
+      description: "Or did it?",
+    },
+    {
+      date: new Date(),
+      slug: '/',
+      title: 'Can AI think?',
+      description: 'Who knows.'
+    },
+    {
+      date: new Date(),
+      slug: "/",
+      title: "I'm a junkie",
+      description: "Maybe, maybe not.",
+    },
+  ]}
+/>
+
+<Projects
+  projects={[
+    {
+      title: "@wluwd/t",
+      description:
+        "Lightweight, framework agnostic, and type‑safe translation library.",
+      link: "//github.com/wluwd/t",
+    },
+  ]}
+/>

@@ -1,0 +1,13 @@
+---
+import { twMerge } from "tailwind-merge";
+import type { TypographyProps } from "./_props";
+import Paragraph from "./paragraph.astro";
+
+interface Props extends TypographyProps {}
+
+const { element, class: className, id } = Astro.props;
+---
+
+<Paragraph element={element ?? "li"} class={twMerge("", className)} id={id}
+  ><slot /></Paragraph
+>

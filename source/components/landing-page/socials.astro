@@ -1,0 +1,41 @@
+---
+import Tooltip from "../tooltip.astro";
+
+interface Props {
+	items: ReadonlyArray<{
+		link: string;
+		callToAction: string;
+		icon: any;
+		color: string;
+	}>;
+}
+
+const { items } = Astro.props;
+---
+
+<ul class="flex w-fit gap-1 rounded-lg bg-neutral-300 p-1" role="list">
+  {
+    items.map((item) => {
+      const color = item.color.match(
+        /(?<l>\d+(?:\.\d+)?).*?(?<c>\d+(?:\.\d+)?).*?(?<h>\d+(?:\.\d+)?)/
+      )?.groups as { l: string; c: string; h: string };
+
+      return (
+        <li>
+          <Tooltip description={item.callToAction}>
+            <a
+              href={item.link}
+              target="blank"
+              rel="noreferrer"
+              style={`--from: ${item.color}; --to: oklch(${Math.min((+color.l + 14) / 100, .8)} ${color.c} ${color.h}); --to: oklch(from ${item.color} min(calc(l + 14 / 100), 0.80) c h)`}
+              class="inline-flex size-10 rounded-md bg-neutral-100 bg-gradient-to-b from-[--social-from] to-[--social-to] p-2 text-neutral-600 outline-none saturate-[.8] transition-[color,--social-from,--social-to] focus-visible:text-neutral-100 focus-visible:[--social-from:--from] focus-visible:[--social-to:--to] hover:text-neutral-100 hover:[--social-from:--from] hover:[--social-to:--to]"
+            >
+              <item.icon />
+            </a>
+            <Fragment slot="tooltip">{item.callToAction}</Fragment>
+          </Tooltip>
+        </li>
+      );
+    })
+  }
+</ul>

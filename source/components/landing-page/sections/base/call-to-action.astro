@@ -1,0 +1,17 @@
+---
+import { twMerge } from "tailwind-merge";
+import { focusClasses } from "../../../_utils";
+
+interface Props {
+	href: string;
+}
+
+const { href } = Astro.props;
+---
+
+<a
+  href={href}
+  class={twMerge(focusClasses, "block rounded-md px-3 py-2 text-base transition-colors hover:bg-neutral-200 focus-visible:bg-neutral-200")}
+>
+  <slot />
+</a>

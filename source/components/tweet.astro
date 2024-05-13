@@ -1,0 +1,135 @@
+---
+import { enrichTweet } from "react-tweet";
+import { getTweet } from "react-tweet/api";
+import { dateFormatter, timeFormatter } from "../utils/formatters";
+import X from "./icons/brands/x.astro";
+import ChatBubble from "./icons/chat-bubble.astro";
+import Heart from "./icons/heart.astro";
+import Verified from "./icons/verified.astro";
+import Code from "./typography/code.astro";
+import Link from "./typography/link.astro";
+import Paragraph from "./typography/paragraph.astro";
+import Small from "./typography/small.astro";
+
+interface Props {
+	id: string;
+}
+
+const { id } = Astro.props;
+
+const api = await getTweet(id);
+
+if (api === undefined) {
+	throw new Error(`Tweet doesn't exist: ${id}`);
+}
+
+const tweet = enrichTweet(api);
+
+const tweetDate = new Date(tweet.created_at);
+---
+
+<article class="rounded-lg mx-auto max-w-full w-[50ch] bg-neutral-300 p-1">
+  <div class="bg-neutral-100 rounded-md px-4 pt-3 pb-2">
+    <div class="flex mb-4">
+      <a
+        href={tweet.user.url}
+        target="_blank"
+        rel="noreferrer"
+        class="flex gap-2.5 transition-opacity hover:opacity-75 items-center"
+      >
+        <div
+          class="h-12 aspect-square rounded-full bg-[image:--avatar] bg-contain bg-center bg-no-repeat"
+          style={{ "--avatar": `url(${tweet.user.profile_image_url_https})` }}
+        >
+        </div>
+        <div class="flex flex-col">
+          <Paragraph class="flex items-center gap-[.25ch] text-neutral-800 *:size-5 *:text-[oklch(77.35%_.147_234.75)]">
+            {tweet.user.name}
+            {
+              (tweet.user.is_blue_verified || tweet.user.verified) && (
+                <Verified />
+              )
+            }
+          </Paragraph>
+          <Code class="text-sm text-neutral-600">
+            @{tweet.user.screen_name}
+          </Code>
+        </div>
+      </a>
+      <a
+        href={tweet.url}
+        target="_blank"
+        rel="noreferrer"
+        class="ml-auto self-start"
+        aria-label="View on X"
+      >
+        <X />
+      </a>
+    </div>
+    <Paragraph class="mb-2">
+      {
+        tweet.entities.map((item) => {
+          switch (item.type) {
+            case "hashtag":
+            case "mention":
+            case "url":
+            case "symbol":
+              return <Link href={item.href}>{item.text}</Link>;
+            case "media":
+              return;
+            default:
+              // some symbols are encoded as HTML entities
+              return <Fragment set:html={item.text} />;
+          }
+        })
+      }
+    </Paragraph>
+    <Paragraph class="text-neutral-600 mb-2">
+      <a
+        href={tweet.url}
+        target="_blank"
+        rel="noreferrer"
+        class="hover:underline underline-offset-2"
+      >
+        <Small>
+          <time datetime={tweetDate.toISOString()}>
+            {timeFormatter.format(tweetDate)} · {
+              dateFormatter.format(tweetDate)
+            }
+          </time>
+        </Small></a
+      >
+    </Paragraph>
+    <div class="flex pt-2 border-t border-neutral-400 gap-[1ch]">
+      {
+        [
+          {
+            link: tweet.like_url,
+            color: "oklch(77.35% 0.147 0)",
+            icon: Heart,
+            cta: "Like this Tweet",
+          },
+          {
+            link: tweet.reply_url,
+            color: "oklch(77.35% 0.147 234.75)",
+            icon: ChatBubble,
+            cta: "Reply",
+          },
+        ].map((action) => (
+          <a
+            href={action.link}
+            target="_blank"
+            rel="noreferrer"
+            class="group flex items-center gap-[.5ch] hover:text-[color-mix(in_oklch,var(--color),black_35%)] transition-[color]"
+            style={{ "--color": action.color }}
+          >
+            <span class="text-[--color] group-hover:bg-[color-mix(in_oklch,var(--color),transparent_85%)] rounded-full p-1 *:size-5 transition-[background-color]">
+              <action.icon />
+            </span>
+            {action.cta}
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</article>

@@ -1,0 +1,56 @@
+---
+import { getCollection } from "astro:content";
+import { getEntries } from "astro:content";
+import { twMerge } from "tailwind-merge";
+import { focusClasses, typographyClasses } from "../../components/_utils";
+import Header from "../../components/article/header.astro";
+import ArrowLongRight from "../../components/icons/arrow-long-right.astro";
+import H1 from "../../components/typography/h1.astro";
+import Small from "../../components/typography/small.astro";
+import Landing from "../../layouts/landing.astro";
+
+const articles = await Promise.all(
+	(await getCollection("writing", (article) => article.data.draft !== true))
+		.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+		.map(async (article) => ({
+			article,
+			tags: await getEntries(article.data.tags),
+		})),
+);
+---
+
+<Landing title="Writing" description="Check out the latest posts!">
+  <H1>Latest Articles</H1>
+  <div class="space-y-8">
+    {
+      articles.map(({ article, tags }) => (
+        <article class="p-1 bg-neutral-300 rounded-xl">
+          <a
+            href={`/writing/${article.slug}/`}
+            class={twMerge(
+              focusClasses,
+              "group block rounded-lg focus-visible:outline-offset-4"
+            )}
+          >
+            <div class={twMerge("p-1 rounded-lg bg-neutral-100")}>
+              <div
+                class={twMerge(
+                  typographyClasses,
+                  "flex flex-col rounded px-3 py-2 transition-colors group-hover:bg-neutral-200 group-focus-visible:bg-neutral-200 [&_header]:mb-[.25lh]"
+                )}
+              >
+                <Header article={article} tags={tags} stacked />
+                <Small element="p">{article.data.description.long}</Small>
+              </div>
+            </div>
+            <Small element="p" class="flex items-center gap-[1ch] px-4 pb-1 pt-2 text-neutral-600">
+              Read More <span class="size-6 overflow-hidden *:-translate-x-full *:transition-transform *:group-hover:translate-x-0 *:group-focus-visible:translate-x-0" aria-hidden="true">
+                <ArrowLongRight />
+              </span>
+            </Small>
+          </a>
+        </article>
+      ))
+    }
+  </div>
+</Base>

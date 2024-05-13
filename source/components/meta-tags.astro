@@ -1,0 +1,55 @@
+---
+import { env } from "../utils/env.ts";
+
+interface Props {
+	title: string;
+	description: string;
+}
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const { description } = Astro.props;
+
+const title =
+	Astro.props.title === env.NAME
+		? Astro.props.title
+		: `${Astro.props.title} · ${env.NAME}`;
+
+const image = new URL("og.png", canonicalURL);
+
+const imageAlt =
+	title === env.NAME
+		? `Banner for ${canonicalURL.hostname}, featuring a portrait of the author, and his name and role`
+		: `Banner for ${canonicalURL.hostname}, showing the page title, and the author's name`;
+---
+
+<title>{title}</title>
+<link rel="canonical" href={canonicalURL} />
+<meta name="description" content={description} />
+<meta name="theme-color" content="#f1f1ef" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta name="viewport" content="width=device-width" />
+<meta name="generator" content={Astro.generator} />
+<meta name="darkreader-lock" />
+
+<meta property="og:description" content={description}/>
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:title" content={title} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:image" content={image} />
+<meta property="og:image:alt" content={imageAlt} />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1280" />
+<meta property="og:image:height" content="675" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:creator" content={env.X_USERNAME} />
+<meta name="twitter:title" content={title}>
+<meta name="twitter:description" content={description}>
+<meta name="twitter:image" content={image}>
+
+<meta name="robots" content="index,follow" />
+<meta name="googlebot" content="index,follow" />
+
+<link rel="sitemap" href="/sitemap-index.xml" />

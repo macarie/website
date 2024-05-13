@@ -1,0 +1,15 @@
+---
+import { twMerge } from "tailwind-merge";
+import type { TypographyProps } from "./_props";
+
+interface Props extends TypographyProps {}
+
+const { element, class: className, id } = Astro.props;
+
+const Element = element ?? "code";
+---
+
+<Element
+  class={twMerge("font-mono text-base font-thin tracking-none", className)}
+  id={id}><slot /></Element
+>

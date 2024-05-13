@@ -1,0 +1,33 @@
+---
+import { Image } from "astro:assets";
+import { twMerge } from "tailwind-merge";
+import portrait from "../assets/landing-page/portrait.avif?url";
+import { env } from "../utils/env";
+import { focusClasses } from "./_utils";
+import H2 from "./typography/h2.astro";
+import H3 from "./typography/h3.astro";
+---
+
+<a
+  href="/"
+  class={twMerge(
+    focusClasses,
+    "my-14 w-fit rounded-lg transition-opacity hover:opacity-75 focus-visible:opacity-75 active:opacity-100"
+  )}
+>
+  <header class="flex items-center gap-2">
+    <Image
+      src={portrait}
+      alt="A small self-portrait used as a logo"
+      height={48}
+      width={48}
+      loading="eager"
+      decoding="sync"
+      class="size-12 rounded-full saturate-[.8]"
+    />
+    <div>
+      <H2 element="h1">{env.NAME}</H>
+      <H3 element="h2">{env.ROLE}</H3>
+    </div>
+  </header>
+</a>

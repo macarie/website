@@ -1,0 +1,22 @@
+---
+import { processTooltip } from "../utils/process-tooltip.ts";
+import { createRandomId } from "../utils/sqids.ts";
+
+interface Props {
+	description: string;
+}
+
+const id = createRandomId();
+
+const content = await Astro.slots.render("default");
+const tooltip = await Astro.slots.render("tooltip");
+
+const { html } = processTooltip(content, id, tooltip);
+
+const { description } = Astro.props;
+---
+
+<Fragment set:html={html} />
+<div id={id} class="sr-only">
+  {description}
+</div>

@@ -1,0 +1,27 @@
+---
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { mdxComponents } from "../components/_mod";
+import Landing from "../layouts/landing.astro";
+
+export const getStaticPaths = async () => {
+	const standalone: readonly string[] = [
+		"/about",
+		"/uses",
+	] satisfies CollectionEntry<"root">["slug"][];
+
+	return (
+		await getCollection("root", (entry) => !standalone.includes(entry.slug))
+	).map((entry) => ({
+		params: { root: entry.slug },
+		props: { entry },
+	}));
+};
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<Landing title={entry.data.title} description={entry.data.description}>
+  <Content components={mdxComponents} />
+</Landing>
