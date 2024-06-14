@@ -1,5 +1,6 @@
 import { env } from "node:process";
 import mdx from "@astrojs/mdx";
+import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 import { defineConfig, passthroughImageService } from "astro/config";
 import rehypePrettyCode from "rehype-pretty-code";
@@ -25,7 +26,7 @@ export default defineConfig({
 			],
 		],
 	},
-	integrations: [tailwind(), mdx()],
+	integrations: [tailwind(), mdx(), sitemap()],
 	vite: {
 		ssr: {
 			noExternal: ["react-tweet"],
