@@ -5,7 +5,7 @@
 	"version": "0.0.1",
 	"scripts": {
 		"astro": "astro",
-		"app.build": "astro build",
+		"app.build": "bun scripts/og-to-png.ts && astro build",
 		"app.preview": "astro preview",
 		"app": "astro dev",
 		"check": "biome check .",
@@ -20,6 +20,7 @@
 		"@types/bun": "^1.1.3",
 		"astro": "^4.7.0",
 		"hast": "^1.0.0",
+		"p-queue": "^8.0.1",
 		"react-tweet": "^3.2.1",
 		"rehype": "^13.0.1",
 		"rehype-format": "^5.0.0",
