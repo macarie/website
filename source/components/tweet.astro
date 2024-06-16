@@ -119,10 +119,10 @@ const tweetDate = new Date(tweet.created_at);
             href={action.link}
             target="_blank"
             rel="noreferrer"
-            class="group flex items-center gap-[.5ch] hover:text-[color-mix(in_oklch,var(--color),black_35%)] transition-[color]"
+            class="group flex items-center gap-[.5ch] transition-[color] hover:text-[color-mix(in_oklch,var(--color),oklch(0%_0_none)_35%)]"
             style={{ "--color": action.color }}
           >
-            <span class="text-[--color] group-hover:bg-[color-mix(in_oklch,var(--color),transparent_85%)] rounded-full p-1 *:size-5 transition-[background-color]">
+            <span class="rounded-full p-1 text-[--color] transition-[background-color] *:size-5 group-hover:bg-[color-mix(in_oklch,var(--color),oklch(none_none_none/0)_85%)]">
               <action.icon />
             </span>
             {action.cta}
