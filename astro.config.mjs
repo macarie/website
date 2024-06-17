@@ -27,9 +27,4 @@ export default defineConfig({
 		],
 	},
 	integrations: [tailwind(), mdx(), sitemap()],
-	vite: {
-		ssr: {
-			noExternal: ["react-tweet"],
-		},
-	},
 });
