@@ -22,6 +22,7 @@
 		"@macarie/tweet-api": "npm:@jsr/macarie__tweet-api@v0.1.1",
 		"@types/bun": "^1.1.6",
 		"astro": "^4.12.2",
+		"gsap": "^3.12.5",
 		"hast": "^1.0.0",
 		"p-queue": "^8.0.1",
 		"rehype": "^13.0.1",

@@ -61,12 +61,6 @@ export default {
 			popout: breakouts.popout.name,
 			full: breakouts.full.name,
 		},
-		gridTemplateColumns: {
-			breakouts: createColumn(
-				breakouts.full,
-				createColumn(breakouts.popout, createColumn(breakouts.content)),
-			),
-		},
 		extend: {
 			fontFamily: {
 				sans: ["var(--inter)", ...defaultTheme.fontFamily.sans],
@@ -96,6 +90,12 @@ export default {
 					color-mix(in oklch, var(--tw-gradient-from), var(--tw-gradient-to) 98.7%) 91.9%,
 					color-mix(in oklch, var(--tw-gradient-from), var(--tw-gradient-to) 100%) 100%
 				)`,
+			},
+			gridTemplateColumns: {
+				breakouts: createColumn(
+					breakouts.full,
+					createColumn(breakouts.popout, createColumn(breakouts.content)),
+				),
 			},
 		},
 	},
