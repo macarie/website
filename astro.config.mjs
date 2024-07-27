@@ -1,6 +1,7 @@
 import { env } from "node:process";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
+import solidJs from "@astrojs/solid-js";
 import tailwind from "@astrojs/tailwind";
 import { defineConfig, passthroughImageService } from "astro/config";
 import rehypePrettyCode from "rehype-pretty-code";
@@ -33,5 +34,5 @@ export default defineConfig({
 	experimental: {
 		clientPrerender: true,
 	},
-	integrations: [tailwind(), mdx(), sitemap()],
+	integrations: [tailwind(), solidJs(), mdx(), sitemap()],
 });

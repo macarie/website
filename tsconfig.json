@@ -11,6 +11,7 @@
 		"moduleDetection": "force",
 		"isolatedModules": true,
 		"jsx": "preserve",
+		"jsxImportSource": "solid-js",
 
 		// strictness options
 		"strict": true,
