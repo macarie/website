@@ -10,12 +10,27 @@ slug: pipes-in-typescript
 draft: true
 ---
 import { Pipe } from "./components/0002-pipes-in-ts/pipe"
+import Audience from "../../components/writing/audience.astro"
 
-The concept of pipes has been around for quite some time, [probably since 1964](https://retrocomputing.stackexchange.com/a/17338). But what is a pipe? The mental model I have of a pipe is this: some initial data passed through a series of functions where the output of one is the input of the next one, then the result of the last function is the final output.
+<Audience>
+People with at least a medium level of knowledge of TypeScript and its type system.
+</Audience>
 
-If you're familiar with math – not that I am – that would be an input provided to the result of a [function composition](https://en.wikipedia.org/wiki/Function_composition), like this:
+The concept of pipes is not new and has been around for quite some time, [probably since 1964](https://retrocomputing.stackexchange.com/a/17338). 
+
+## What is a pipe, actually?
+
+Mainly there are two kinds of pipes: Unix pipes and pipes used in programming. They are similar in what they do, but differ in how they achieve it; in this article we'll focus on the programming ones.
+
+My mental model of a pipe is this: some initial data passed through a series of functions where the output of one is the input of the next one. If you're familiar with math, that would be an input provided to the result of a [function composition](https://en.wikipedia.org/wiki/Function_composition).
+
+To visualize it, something akin to this:
 
 <Pipe client:load />
+
+# The Basic Implementation
+
+Many languages have a pipe operator built in, but JavaScript, and thus TypeScript, lack one (for now at least, [there's a pending proposal](https://github.com/tc39/proposal-pipeline-operator)), so we have to implement our own.
 
 In JS, a terse implementation would look something like this:
 
@@ -32,18 +47,18 @@ declare const pipe: (data: any, ...fns: readonly Function[]) => any;
 
 Nice, now we see that `data{:ts}` can be any value, while `fns{:ts}` is an array of functions, and the return can be any value. But these types are not that useful, and `any{:ts}`… kinda sucks.
 
-Before trying to improve the previous design, we should lay out our constraints:
+Before trying to improve the previous design, we should lay out the constraints we know of:
 
 - `typeof data{:ts}` has to be assignable to the arguments of `fns.at(0){:ts}`.
-- `pipe{:ts}`'s return type should be the same as `fns.at(-1){:ts}`.
+- `pipe{:ts}`'s return type should be the same as `fns.at(-1){:ts}`'s.
 
-With these constraints in mind, and with the help of [generic type parameters](https://www.typescriptlang.org/docs/handbook/2/generics.html), we can try writing a simplified version with only one function:
+With these constraints in mind, and with the help of [generic type parameters](https://www.typescriptlang.org/docs/handbook/2/generics.html), we can  accepttry writing a simplified version that accepts only one function:
 
 ```ts
 declare const pipe: <D0, D1>(data: D0, fn1: (arg: D0) => D1) => D1;
 ```
 
-Does this work? It should… I mean, our constraints still hold true, `D0{:ts}` (`data{:ts}`) is `fn1{:ts}`'s argument, and `fn1{:ts}`'s output, `D1{:ts}` is our final output, so there's no reason for it not to. Let's try with a helper function:
+Does this work? It should… I mean, our constraints still hold true, `D0{:ts}` (`data{:ts}`) is `fn1{:ts}`'s argument, and `fn1{:ts}`'s output, `D1{:ts}`, is our final output, so there's no reason for it not to. Let's try with a helper function:
 
 ```ts
 declare const formatNumber: (input: number) => string;
@@ -60,7 +75,7 @@ const probe = pipe("0", formatNumber);
 
 Umh, the error seems to be kinda in the wrong place? I know that's debatable, but for me the error should be on the function, and not on the initial value.
 
-This happens because `D0{:ts}` is inferred as `fn1{:ts}`'s parameter, so `data{:ts}` if forced to be `number{:ts}`. Can we somehow fix that? Of course! [In TypeScript 5.4 we've got a utility for this](https://devblogs.microsoft.com/typescript/announcing-typescript-5-4-beta/#the-noinfer-utility-type) scenario: `NoInfer<Type>{:ts}`! This built-in type tells the type system to not infer the generic type parameter from there, but from somewhere else.
+This happens because `D0{:ts}` is inferred as `fn1{:ts}`'s parameter, so `data{:ts}` if forced to be `number{:ts}`. Can we somehow fix that? Of course! [In TypeScript 5.4 we've got a utility for this](https://devblogs.microsoft.com/typescript/announcing-typescript-5-4-beta/#the-noinfer-utility-type): `NoInfer<Type>{:ts}`. This built-in type tells the type system to infer the generic type parameter from some other place.
 
 ```ts
 declare const pipe: <D0, D1>(
@@ -69,7 +84,7 @@ declare const pipe: <D0, D1>(
 ) => NoInfer<D1>;
 ```
 
-Now we are sure that `data{:ts}`'s type will be inferred from the parameter itself. If we try again we can see that the error moved to the function, telling us that a function that takes a number as an input is not assignable to one that takes a string (the function we were expected to provide).
+Now we are sure that `data{:ts}`'s type will be inferred from the parameter itself. If we try again we can see that the error moved to the function, telling us that a function that takes a number as an input is not assignable to one that takes a string (a.k.a. the function we were expected to provide).
 
 ```ts
 const probe = pipe("0", formatNumber);
@@ -95,7 +110,9 @@ But this is tiresome, it would be neat to automate this. Sadly, to the best of m
 
 But fear not, there's still hope. TypeScript in some ways is magic, [its type-system is Turing Complete](https://github.com/microsoft/TypeScript/issues/14833). The type system within TypeScript is a pure functional programming language, with some limitations – usually the number of recursive calls it allows. This means that **if you find a way to express your type as a program, you're good to go**!
 
-Can we do that? Considering that we don't have many constraints, and that they're not complex either, yes we can! Let's start by writing a function that returns the correct chain of functions in JS-like pseudo-code that can mix types and values.
+## The Programmatic Implementation
+
+Can we  write our type as a program? Considering that we don't have many constraints, and that they're not complex either, yes we can! Let's start by writing a function that returns the correct chain of functions in a JS-like pseudo-code that can mix types and values.
 
 ```js
 const expectedChain = (fns, data) => {
@@ -120,13 +137,13 @@ const expectedChain = (fns, data) => {
 };
 ```
 
-The `@fn` utils are available within TypeScript, and so are conditional expressions, they're not an issue, but it looks like we have loops and mutations. Those TypeScript can't do. So let's try rewrite the function in a FP friendly way.
+The `@fn` utils are something TypeScript can do as well, and so are conditional expressions, they're not an issue, but it looks like we have loops and mutations. Those TypeScript can't do. So let's try rewrite the function in an FP-friendly way.
 
 ```js
 const expectedChain = (
 	fns,
 	data,
-	chain,
+	chain = [],
 	expectedFunction = (parameter: @typeOf(data)) => any,
 	head = fns.head(),
 	tail = fns.tail(),
@@ -138,7 +155,7 @@ const expectedChain = (
 			: [...chain, expectedFunction, ...tail.map(@typeOf)];
 ```
 
-Thist starts looking like propert TypeScript already, neat!
+Thist starts looking like proper TypeScript already, neat!
 
 Before writing our implementation, we need some helpers, so let's define what they are and do first:
 
@@ -193,7 +210,7 @@ type CreateChain<
 		: [...Chain, ExpectedFunction, ...TailFunctions];
 ```
 
-Look at that! It's almost a one-to-one translation of the pseudo-code! Now let's plug this helper into our `pipe{:ts}` function, and see how it goes.
+Would you look at that! It's almost a one-to-one translation of the pseudo-code! Now let's plug this helper into our `pipe{:ts}` function, and see how it goes.
 
 ```ts
 declare const pipe: <const Value, const Fns extends readonly Fn[]>(
@@ -204,9 +221,9 @@ declare const pipe: <const Value, const Fns extends readonly Fn[]>(
 ) => ReturnType<Last<NoInfer<Fns>>>;
 ```
 
-The repetition of calling `CreateChain{:ts}` twice is because, if a function is not chainable, TypeScript would mark as an error every function, giving only the index of the array as a reference. That makes it difficult to understand where the error is.
+There's only one little thing still bugging me, but there isnt much we can do abiut it: "calling" `CreateChain{:ts}` twice. If we assign it to a generic type parameter, then if a function is not chainable, TypeScript would mark as an error all the functions, giving only the index of the array as a reference. That makes it difficult to understand where the error is and provides a bad developer experience.
 
-To test it out, let's declare some utilities and use our `pipe{:ts}` function:
+To test it out, let's declare some utilities:
 
 ```ts
 declare const double: (n: number) => number;
@@ -214,15 +231,21 @@ declare const square: (n: number) => number;
 declare const formatNumber: (n: number) => string;
 declare const uppercase: (s: string) => string;
 declare const stringLength: (s: string) => number;
+```
 
-const a = pipe(8, uppercase, double, square, toString);
+Now let's see our pipe in action:
+
+```ts
+const a = pipe(8, uppercase, double, square, formatNumber);
 //  ^?
-const b = pipe(8, double, uppercase, square, toString);
+const b = pipe(8, double, uppercase, square, formatNumber);
 //  ^?
-const c = pipe(8, double, square, uppercase, toString);
+const c = pipe(8, double, square, uppercase, formatNumber);
 //  ^?
-const d = pipe(8, double, square, toString, uppercase);
+const d = pipe(8, double, square, formatNumber, uppercase);
 //  ^?
 const e = pipe("hello!", stringLength, double, square);
 //  ^?
 ```
+
+All the errors are in the right place and the inferred output is correct, awesome!
